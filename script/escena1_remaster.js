@@ -134,11 +134,10 @@ function cargar_objetos() {
     object.rotation.x = 6;
     object.scale.set(100, 100, 100);
 
-
     scene.add(object)
   });
 
-
+//nepe
   /*
     loader.load('/resources/Escena1/Models/Escenario/BeachRockFree_fbx.fbx', (object) => {
       object.position.z = 10;    //lejos o cercs
