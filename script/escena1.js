@@ -1,8 +1,8 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 
-import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
 
-import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
+import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
 
 class Escena1 {
   constructor() {
@@ -10,13 +10,12 @@ class Escena1 {
   }
 
   _Initialize() {
-
     const NombreModeloEscenario = "BeachRockFree_fbx.fbx"
-
 
     this._threejs = new THREE.WebGLRenderer({
       antialias: true,
     });
+
     this._threejs.shadowMap.enabled = true;
     this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
     this._threejs.setPixelRatio(window.devicePixelRatio);
@@ -39,7 +38,6 @@ class Escena1 {
     this._camera.position.y = 65;
 
     this._scene = new THREE.Scene();
-
 
     let light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
     light.position.set(20, 100, 10);
@@ -69,15 +67,15 @@ class Escena1 {
 
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
-        'resources/Escena1/posx.jpg',
-        'resources/Escena1/negx.jpg',
-        'resources/Escena1/posy.jpg',
-        'resources/Escena1/negy.jpg',
-        'resources/Escena1/posz.jpg',
-        'resources/Escena1/negz.jpg',
+      'resources/Escena1/posx.jpg',
+      'resources/Escena1/negx.jpg',
+      'resources/Escena1/posy.jpg',
+      'resources/Escena1/negy.jpg',
+      'resources/Escena1/posz.jpg',
+      'resources/Escena1/negz.jpg',
     ]);
     this._scene.background = texture;
-  
+
     this.CargarEscenario(NombreModeloEscenario);
 
     this._RAF();
@@ -96,24 +94,22 @@ class Escena1 {
     });
   }
 
-  CargarEscenario(ModelScene){
+  CargarEscenario(ModelScene) {
     const fbxLoader = new FBXLoader()
-      fbxLoader.load('/resources/Escena1/Models/Escenario/' + ModelScene,
-    (object) => {
+    fbxLoader.load('/resources/Escena1/Models/Escenario/' + ModelScene,
+      (object) => {
         this._scene.add(object)
-    },
-    (xhr) => {
+      },
+      (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-    },
-    (error) => {
+      },
+      (error) => {
         console.log(error)
-    });
-    
+      });
+
   }
-  
+
 }
-
-
 
 let _APP = null;
 
@@ -123,4 +119,3 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
- 
