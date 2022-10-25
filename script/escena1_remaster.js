@@ -70,11 +70,17 @@ function setupScene() {
 
   ////////////////AJUSTE DE OBJETOS/////////////////////
   //third person camera
-  grid.position.y = -1;
+  //grid.position.y = -1;
   cube.position.y = 2;
-  camera.position.z = 10;    //lejos o cercs
-  camera.position.y = 8;      //altura
-  camera.rotation.x = 6;
+
+  //camera.position.z = 13;    //lejos o cerca
+  camera.position.y = 25;      //altura
+  camera.rotation.x = 4.8;    //angulo camara
+
+  //camera.position.z = 0;    //lejos o cercs
+  //camera.position.y = 2;      //altura
+  //camera.rotation.x = 0;    //angulo camara
+
   //cube.position.x = 5;
   //cube.add(camera);
 
@@ -126,32 +132,116 @@ function cargar_objetos() {
     'resources/Escena1/negz.jpg',
   ]);
   scene.background = texture;
-  //
-  var loader = new THREE.FBXLoader();
-  loader.load('/resources/Escena1/Models/Escenario/BeachRockFree_fbx.fbx', function (object) {
-    object.position.z = 10;    //lejos o cercs
-    object.position.y = 8;      //altura
-    object.rotation.x = 6;
-    object.scale.set(100, 100, 100);
 
-    scene.add(object)
+  //SCENERY
+  var scenary = new THREE.FBXLoader();
+  scenary.load('resources/Escena1/Models/Escenario/BeachRockFree_fbx.fbx', function (object_scenary) {
+    object_scenary.position.z = -90;    //lejos o cercs
+    object_scenary.position.y = -5;      //altura
+    object_scenary.position.x = 50;      //izq derecha
+    // object.rotation.x = 6;
+    object_scenary.scale.set(0.4, 0.4, 0.4);
+    scene.add(object_scenary)
+  });
+  //SCENERY
+
+
+
+
+
+
+  var purple1 = new THREE.FBXLoader();
+  purple1.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = -15;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
   });
 
-//nepe
-  /*
-    loader.load('/resources/Escena1/Models/Escenario/BeachRockFree_fbx.fbx', (object) => {
-      object.position.z = 10;    //lejos o cercs
-      object.position.y = 8;      //altura
-      object.rotation.x = 6;
-      scene.add(object)
-    },
-      (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-      },
-      (error) => {
-        console.log(error)
-      });
-  
-  */
+  var purple2 = new THREE.FBXLoader();
+  purple2.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = -15;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = 0;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+  var purple3 = new THREE.FBXLoader();
+  purple3.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = -15;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = 15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+  var purple4 = new THREE.FBXLoader();
+  purple4.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 0;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+  var purple5 = new THREE.FBXLoader();
+  purple5.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 0;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = 0;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+  var purple6 = new THREE.FBXLoader();
+  purple6.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 0;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = 15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+
+  var purple7 = new THREE.FBXLoader();
+  purple7.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 15;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+  var purple8 = new THREE.FBXLoader();
+  purple8.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 15;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = 0;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+  var purple9 = new THREE.FBXLoader();
+  purple9.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 15;    //lejos o cercs
+    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.x = 15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    scene.add(object_purple_square)
+  });
+
+
+
 
 }
