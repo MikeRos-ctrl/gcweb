@@ -10,6 +10,10 @@ var cube;
 var visibleSize = { width: window.innerWidth, height: window.innerHeight };
 var mixers = [];
 var mixers_2 = [];
+var player1;
+var action, action2;
+var flag = false;
+var personaje_global;
 
 $(document).ready(function () {
   setupScene();
@@ -21,6 +25,7 @@ $(document).ready(function () {
 
 function onKeyDown(event) {
   keys[String.fromCharCode(event.keyCode)] = true;
+
 }
 
 function onKeyUp(event) {
@@ -73,9 +78,9 @@ function setupScene() {
   //grid.position.y = -1;
   cube.position.y = 2;
 
-  //camera.position.z = 13;    //lejos o cerca
-  camera.position.y = 25;      //altura
-  camera.rotation.x = 4.8;    //angulo camara
+  camera.position.z = 20;    //lejos o cerca
+  camera.position.y = 20;      //altura
+  camera.rotation.x = 5.3;    //angulo camara 4.8
 
   //camera.position.z = 0;    //lejos o cercs
   //camera.position.y = 2;      //altura
@@ -98,6 +103,7 @@ function render() {
   var yaw = 0;				//leff or right
   var forward = 0; 		//forward backward
 
+
   if (keys["A"]) {
     yaw = 3;
   } else if (keys["D"]) {
@@ -109,14 +115,23 @@ function render() {
     forward = 5;
   }
 
-  //first person
-  camera.rotation.y += yaw * deltaTime;
-  camera.translateZ(forward * deltaTime);
+  // camera.rotation.y += yaw * deltaTime;
+  //camera.translateZ(forward * deltaTime);
 
-  //third person
-  //cube.rotation.y += yaw * deltaTime;
-  //cube.translateZ(forward * deltaTime);
+  cube.rotation.y += yaw * deltaTime;
+  cube.translateZ(forward * deltaTime);
 
+  if (flag == true) {
+    personaje_globalxd = scene.getObjectByName("player1");
+    personaje_globalxd.rotation.y += yaw * deltaTime;
+    personaje_globalxd.translateZ(forward * deltaTime);
+  }
+
+  if (mixers.length > 0) {
+    for (var i = 0; i < mixers.length; i++) {
+      mixers[i].update(deltaTime);
+    }
+  }
   renderer.render(scene, camera);
 }
 
@@ -145,6 +160,35 @@ function cargar_objetos() {
   });
   //SCENERY
 
+  //PLAYER 1
+  player1 = new THREE.FBXLoader();
+  player1.load('resources/jugador2/Ch45_nonPBR.fbx', function (personaje) {
+    //player1.load('resources/jugador2/Idle.fbx', function (personaje) {
+
+    personaje.mixer = new THREE.AnimationMixer(personaje);
+    mixers.push(personaje.mixer);
+
+    action = personaje.mixer.clipAction(personaje.animations[0]);
+    //  action2 = personaje.mixer.clipAction(personaje.animations[1]);
+
+    action.play();
+    //action2.play();
+
+    action.weight = 1;
+    //action2.weight = 1;
+
+    //object_purple_square.position.z = -15;    //lejos o cercs
+    personaje.position.y = 2;      //altura
+    //personaje.position.x = -15;      //izq derecha
+    // object_purple_square.rotation.y = 3.2;
+    personaje.scale.set(0.05, 0.05, 0.05);
+    personaje.name = "player1";
+    scene.add(personaje);
+  }, (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    flag = true;
+  });
+  //PLAYER 1
 
 
 
@@ -240,8 +284,6 @@ function cargar_objetos() {
     object_purple_square.scale.set(0.03, 0.03, 0.03);
     scene.add(object_purple_square)
   });
-
-
 
 
 }
