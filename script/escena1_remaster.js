@@ -1,10 +1,3 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
-
-import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
-
-
 var scene;
 var camera;
 var renderer;
@@ -21,9 +14,7 @@ var player1;
 var action, action2;
 var flag = false;
 var personaje_global;
-
-let animationActions: THREE.AnimationAction[] = []
-
+let animations = [];
 
 $(document).ready(function () {
   setupScene();
@@ -170,45 +161,50 @@ function cargar_objetos() {
   });
   //SCENERY
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   //PLAYER 1
-
   player1 = new THREE.FBXLoader();
   player1.load('resources/jugador2/Ch45_nonPBR.fbx', function (personaje) {
-    //player1.load('resources/jugador2/Idle.fbx', function (personaje) {
 
     let mixer;
     mixer = new THREE.AnimationMixer(personaje);
-    //action = mixer.clipAction(personaje.animations[0]);
-    //mixers.push(action);
+    //mixers.push(personaje.mixer);
 
+    //  action = personaje.mixer.clipAction(personaje.animations[0]);
     //  action2 = personaje.mixer.clipAction(personaje.animations[1]);
 
     //action.play();
     //action2.play();
 
+    //action.weight = 1;
+    //action2.weight = 1;
+
+    //object_purple_square.position.z = -15;    //lejos o cercs
     personaje.position.y = 2;      //altura
+    //personaje.position.x = -15;      //izq derecha
+    // object_purple_square.rotation.y = 3.2;
     personaje.scale.set(0.05, 0.05, 0.05);
     personaje.name = "player1";
     scene.add(personaje);
 
-    let idle
-    idle.load('resources/jugador2/Idle.fbx', function (personaje) {
 
-    })
+
+
+    const _OnLoad = (animName, anim) => {
+      const clip = anim.animations[0];
+      const action = mixer.clipAction(clip);
+
+      animations[animName] = {
+        clip: clip,
+        action: action,
+      };
+    };
+
+    const loader = new FBXLoader();
+    loader.setPath('resources/jugador2/');
+    loader.load('Idle.fbx', (a) => { _OnLoad('idle', a); });
+
+
+
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
     flag = true;
