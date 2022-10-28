@@ -13,8 +13,14 @@ var mixers_2 = [];
 var player1;
 var action, action2;
 var flag = false;
-var personaje_global;
+var personaje_globalxd;
 let animations = [];
+
+let idle;
+let run;
+let jump;
+
+let algo = false;
 
 $(document).ready(function () {
   setupScene();
@@ -26,11 +32,16 @@ $(document).ready(function () {
 
 function onKeyDown(event) {
   keys[String.fromCharCode(event.keyCode)] = true;
-
+  if (algo == true) {
+    idle.weight = 0;
+    run.weight = 1;
+  }
 }
 
 function onKeyUp(event) {
   keys[String.fromCharCode(event.keyCode)] = false;
+  idle.weight = 1;
+  run.weight = 0;
 }
 
 function setupScene() {
@@ -104,7 +115,6 @@ function render() {
   var yaw = 0;				//leff or right
   var forward = 0; 		//forward backward
 
-
   if (keys["A"]) {
     yaw = 3;
   } else if (keys["D"]) {
@@ -115,6 +125,22 @@ function render() {
   } else if (keys["S"]) {
     forward = 5;
   }
+
+  if (keys["W"] || keys["A"] || keys["S"] || keys["D"]) {
+    //corre
+  } else {
+    algo = false;
+  }
+
+  if (keys["P"]) {
+    //run.weight = 0;
+    //dle.weight = 0;
+    //jump.weight = 1; 
+  }
+
+
+
+
 
   // camera.rotation.y += yaw * deltaTime;
   //camera.translateZ(forward * deltaTime);
@@ -161,50 +187,53 @@ function cargar_objetos() {
   });
   //SCENERY
 
+
+
+
+
+
+
+
+
+
+
+
   //PLAYER 1
   player1 = new THREE.FBXLoader();
   player1.load('resources/jugador2/Ch45_nonPBR.fbx', function (personaje) {
-
-    let mixer;
-    mixer = new THREE.AnimationMixer(personaje);
-    //mixers.push(personaje.mixer);
-
-    //  action = personaje.mixer.clipAction(personaje.animations[0]);
-    //  action2 = personaje.mixer.clipAction(personaje.animations[1]);
-
-    //action.play();
-    //action2.play();
-
-    //action.weight = 1;
-    //action2.weight = 1;
-
-    //object_purple_square.position.z = -15;    //lejos o cercs
     personaje.position.y = 2;      //altura
-    //personaje.position.x = -15;      //izq derecha
-    // object_purple_square.rotation.y = 3.2;
     personaje.scale.set(0.05, 0.05, 0.05);
     personaje.name = "player1";
+
+    const anim = new THREE.FBXLoader();
+    anim.load('resources/jugador2/Idle.fbx', (anim) => {
+      var diosayudame = new THREE.AnimationMixer(personaje);
+      idle = diosayudame.clipAction(anim.animations[0]);
+      idle.play();
+      idle.weight = 1;
+      mixers.push(diosayudame);
+    });
+
+    const anim2 = new THREE.FBXLoader();
+    anim2.load('resources/jugador2/Running.fbx', (anim) => {
+      var diosayudame2 = new THREE.AnimationMixer(personaje);
+      run = diosayudame2.clipAction(anim.animations[0]);
+      run.play();
+      run.weight = 0;
+      mixers.push(diosayudame2);
+    });
+
+    const anim3 = new THREE.FBXLoader();
+    anim3.load('resources/jugador2/Jumping.fbx', (anim) => {
+      var diosayudame2 = new THREE.AnimationMixer(personaje);
+      jump = diosayudame2.clipAction(anim.animations[0]);
+      //jump.play();
+      //jump.weight = 0;
+      mixers.push(diosayudame2);
+    });
+
+
     scene.add(personaje);
-
-
-
-
-    const _OnLoad = (animName, anim) => {
-      const clip = anim.animations[0];
-      const action = mixer.clipAction(clip);
-
-      animations[animName] = {
-        clip: clip,
-        action: action,
-      };
-    };
-
-    const loader = new FBXLoader();
-    loader.setPath('resources/jugador2/');
-    loader.load('Idle.fbx', (a) => { _OnLoad('idle', a); });
-
-
-
   }, (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
     flag = true;
