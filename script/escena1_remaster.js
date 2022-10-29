@@ -32,16 +32,16 @@ $(document).ready(function () {
 
 function onKeyDown(event) {
   keys[String.fromCharCode(event.keyCode)] = true;
-  if (algo == true) {
-    idle.weight = 0;
-    run.weight = 1;
-  }
 }
 
 function onKeyUp(event) {
   keys[String.fromCharCode(event.keyCode)] = false;
-  idle.weight = 1;
+  //run.crossFadeFrom(idle, 0.8, true);
+  run.reset();
+
   run.weight = 0;
+  //  run.reset();
+  //idle.weight = 1;
 }
 
 function setupScene() {
@@ -127,20 +127,20 @@ function render() {
   }
 
   if (keys["W"] || keys["A"] || keys["S"] || keys["D"]) {
-    //corre
-  } else {
-    algo = false;
+    run.weight = 1;
   }
 
   if (keys["P"]) {
-    //run.weight = 0;
-    //dle.weight = 0;
-    //jump.weight = 1; 
+    algo = true;
   }
 
-
-
-
+  if (algo == true) {
+    jump.weight = 1;
+    jump.setLoop(THREE.LoopOnce, 1);
+    jump.reset();
+    algo = false;
+    //jump.weight = 0; 
+  }
 
   // camera.rotation.y += yaw * deltaTime;
   //camera.translateZ(forward * deltaTime);
@@ -209,8 +209,8 @@ function cargar_objetos() {
     anim.load('resources/jugador2/Idle.fbx', (anim) => {
       var diosayudame = new THREE.AnimationMixer(personaje);
       idle = diosayudame.clipAction(anim.animations[0]);
-      idle.play();
       idle.weight = 1;
+      idle.play();
       mixers.push(diosayudame);
     });
 
@@ -218,8 +218,8 @@ function cargar_objetos() {
     anim2.load('resources/jugador2/Running.fbx', (anim) => {
       var diosayudame2 = new THREE.AnimationMixer(personaje);
       run = diosayudame2.clipAction(anim.animations[0]);
-      run.play();
       run.weight = 0;
+      run.play();
       mixers.push(diosayudame2);
     });
 
@@ -227,11 +227,10 @@ function cargar_objetos() {
     anim3.load('resources/jugador2/Jumping.fbx', (anim) => {
       var diosayudame2 = new THREE.AnimationMixer(personaje);
       jump = diosayudame2.clipAction(anim.animations[0]);
-      //jump.play();
-      //jump.weight = 0;
+      jump.weight = 0;
+      jump.play();
       mixers.push(diosayudame2);
     });
-
 
     scene.add(personaje);
   }, (xhr) => {
