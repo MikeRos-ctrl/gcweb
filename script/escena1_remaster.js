@@ -33,8 +33,40 @@ $(document).ready(function () {
   cargar_objetos();
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
+  initializeFirebase();
+  createPlayer();
   render();
 });
+
+function initializeFirebase() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjfVDplX8NuQc2hr9Npz6tb3QgByXG4gI",
+    authDomain: "gcww-76500.firebaseapp.com",
+    projectId: "gcww-76500",
+    storageBucket: "gcww-76500.appspot.com",
+    messagingSenderId: "204226126815",
+    appId: "1:204226126815:web:b1cd64f8df6b306eb95a6a"
+  };
+  firebase.initializeApp(firebaseConfig);
+}
+
+function createPlayer() {
+  var position = { x: 0, y: 2, z: 0 };
+  var rotation = { x: 0, y: 0, z: 0 };
+  const dbRefPlayers = firebase.database().ref().child("jugadores");
+
+  let zapato = "zapato";
+  let numero = Math.floor(Math.random() * 777);
+  let nombre = zapato + numero;
+
+  var newPlayer = dbRefPlayers.push();
+  newPlayer.set({
+    nombre,
+    position,
+    rotation,
+  });
+}
+
 
 function createRenderer(color) {
   let renderer = new THREE.WebGLRenderer({ precision: "mediump" });
@@ -191,9 +223,6 @@ function render() {
   personaje_globalxd2 = scene.getObjectByName("player2");
   personaje_globalxd2.rotation.y += yaw2 * deltaTime;
   personaje_globalxd2.translateZ(forward2 * deltaTime);
-
-
-
 
   if (mixers.length > 0) {
     for (var i = 0; i < mixers.length; i++) {
