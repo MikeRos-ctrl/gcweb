@@ -37,12 +37,11 @@ var collisionObjects = [];
 let dahyun;
 let chaeyoung;
 var col;
+let supreme;
 let man;
-
-
+var currentPlayer;
 
 $(document).ready(function () {
-  alert("nepe")
   setupScene();
   cargar_objetos();
   document.addEventListener('keydown', onKeyDown);
@@ -105,15 +104,38 @@ $(document).ready(function () {
     var player = snap.val();
     var key = snap.key;
     var nombre = player.nombre;
+    let action = player.action;
     let personajePrincipalxd = scene.getObjectByName(nombre);
 
-    //  for (var i = 0; i < jugadores.length; i++) {
-    //   if (jugadores[i].key == key) {
-    personajePrincipalxd.rotation.y = player.rotation.y;
-    personajePrincipalxd.position.z = player.position.z;
-    personajePrincipalxd.position.x = player.position.x;
-    // }
-    //}
+    for (var i = 0; i < jugadores.length; i++) {
+      if (jugadores[i].key == key) {
+        personajePrincipalxd.rotation.y = player.rotation.y;
+        personajePrincipalxd.position.z = player.position.z;
+        personajePrincipalxd.position.x = player.position.x;
+
+        console.log(action);
+
+        if (action == "run") {
+          personajePrincipalxd.idle.stop();
+          personajePrincipalxd.run.play();
+        }
+        else if (action == "idle") {
+          personajePrincipalxd.run.stop();
+          personajePrincipalxd.idle.play();
+        }
+        else if (action == "jump") {
+          personajePrincipalxd.run.stop();
+          personajePrincipalxd.idle.stop();
+          personajePrincipalxd.jump.play();
+          setTimeout(() => {
+            personajePrincipalxd.jump.stop();
+          }, 1700)
+
+        }
+
+
+      }
+    }
 
   });
 
@@ -124,7 +146,7 @@ $(document).ready(function () {
     var position = { x: 0, y: 2, z: 0 };
     var rotation = { x: 0, y: 0, z: 0 };
     let nombre = document.querySelector("#txtName").value;
-
+    let action = "idle";
     userName = nombre;
 
     var newPlayer = dbRefPlayers.push();
@@ -132,6 +154,7 @@ $(document).ready(function () {
       nombre,
       position,
       rotation,
+      action,
     });
   });
 });
@@ -222,6 +245,7 @@ function onKeyDown(event) {
 function onKeyUp(event) {
   keys[String.fromCharCode(event.keyCode)] = false;
   run = false;
+  jump = false;
 }
 
 function render() {
@@ -230,7 +254,6 @@ function render() {
 
   var yaw = 0;				//leff or right
   var forward = 0; 		//forward backward
-  var currentPlayer;
   var currentKey;
   var place;
 
@@ -244,11 +267,12 @@ function render() {
   if (keys["W"]) {
     forward = -5;
     run = true;
-  } if (keys["P"]) {
+  } if (keys["S"]) {
     forward = 5;
     run = true;
   }
   if (keys["M"]) {
+    run = true;
     jump = true;
   }
 
@@ -271,32 +295,28 @@ function render() {
     currentPlayer.rotation.y = personajePrincipal.rotation.y;
     currentPlayer.position.x = personajePrincipal.position.x;
     currentPlayer.position.z = personajePrincipal.position.z;
-    updateFirebase(currentPlayer, currentKey);
+    currentPlayer.action = "idle";
 
     if (run) {
-      // personajePrincipal.run.weight = 1;
-      //personajePrincipal.run.setLoop(THREE.LoopOnce, 1);
-
       personajePrincipal.run.play();
-      // personajePrincipal.run.curAction.setLoop(THREE.LoopOnce, 1);
-
-
+      currentPlayer.action = "run";
     }
     else {
       personajePrincipal.run.stop();
-      //   personajePrincipal.run.reset();
-      //personajePrincipal.idle.crossFadeTo(personajePrincipal.run, 0.2, true);
-
-      //personajePrincipal.idle.crossFadeFrom(personajePrincipal.run, 0.2, true);
-
-      //     personajePrincipal.reset();
-      // personajePrincipal.run.weight = 0;
-      //personajePrincipal.idle.crossFadeFrom(personajePrincipal.run, 0.2, true);
+      currentPlayer.action = "idle";
     }
 
     if (jump) {
       personajePrincipal.jump.play();
+      currentPlayer.action = "jump";
+      setTimeout(() => {
+        personajePrincipal.jump.stop();
+      }, 1700)
     }
+
+    //  console.log(currentPlayer);
+    updateFirebase(currentPlayer, currentKey);
+
 
     /*
     try {
@@ -333,7 +353,8 @@ function updateFirebase(currentPlayer, currentKey) {
   dbRefPlayers.update({
     nombre: currentPlayer.nombre,
     position: currentPlayer.position,
-    rotation: currentPlayer.rotation
+    rotation: currentPlayer.rotation,
+    action: currentPlayer.action,
   })
 }
 
