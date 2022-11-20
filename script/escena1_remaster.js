@@ -28,18 +28,22 @@ let algo2 = false;
 let renderers = [];
 let cameras = [];
 var jugadores = [];
-
 var userName;
 var update = false;
 let personajePrincipal;
 var purple9;
 var collisionObjects = [];
-let dahyun;
-let chaeyoung;
 var col;
 let supreme;
 let man;
 var currentPlayer;
+let nJugadores = 0;
+let jugador1Ready = false;
+let jugador2Ready = false;
+let contador = 0;
+let aux;
+let salta = false;
+
 
 $(document).ready(function () {
   setupScene();
@@ -51,13 +55,25 @@ $(document).ready(function () {
   const dbRefPlayers = firebase.database().ref().child("jugadores");
 
   dbRefPlayers.on("child_added", (snap) => {
+
     var player = snap.val();
     var key = snap.key;
 
     var newplayer = new THREE.FBXLoader();
     newplayer.load('resources/jugador2/Ch45_nonPBR.fbx', function (personaje) {
-      personaje.position.y = 2;      //altura estaba en 2 xd
-      personaje.position.x = -17;    //izq-der
+      personaje.position.y = 0.5;      //altura estaba en 2 xd
+
+      if (nJugadores == 0) {
+        personaje.position.x = -17;    //izq-der
+        jugador1Ready = true;
+      }
+      else {
+        jugador2Ready = true;
+        personaje.position.x = 15;    //izq-der
+        document.getElementById("container").style.display = "none";
+      }
+      nJugadores++;
+
       personaje.position.z = -20;    //profundidad lejor o cerca
       personaje.scale.set(0.05, 0.05, 0.05);
       personaje.name = player.nombre;
@@ -75,8 +91,6 @@ $(document).ready(function () {
       anim2.load('resources/jugador2/Running.fbx', (anim) => {
         var animation = new THREE.AnimationMixer(personaje);
         personaje.run = animation.clipAction(anim.animations[0]);
-        //personaje.run.weight = 0;
-        //personaje.run.play();
         mixers.push(animation);
       });
 
@@ -84,8 +98,6 @@ $(document).ready(function () {
       anim3.load('resources/jugador2/Jumping.fbx', (anim) => {
         var animation = new THREE.AnimationMixer(personaje);
         personaje.jump = animation.clipAction(anim.animations[0]);
-        //personaje.jump.weight = 0;
-        //personaje.jump.play();
         mixers.push(animation);
       });
 
@@ -106,6 +118,8 @@ $(document).ready(function () {
     var nombre = player.nombre;
     let action = player.action;
     let personajePrincipalxd = scene.getObjectByName(nombre);
+    let array = player.boxPosition;
+    //console.log(array);
 
     for (var i = 0; i < jugadores.length; i++) {
       if (jugadores[i].key == key) {
@@ -113,8 +127,7 @@ $(document).ready(function () {
         personajePrincipalxd.position.z = player.position.z;
         personajePrincipalxd.position.x = player.position.x;
 
-        console.log(action);
-
+        //        console.log(action);
         if (action == "run") {
           personajePrincipalxd.idle.stop();
           personajePrincipalxd.run.play();
@@ -130,24 +143,29 @@ $(document).ready(function () {
           setTimeout(() => {
             personajePrincipalxd.jump.stop();
           }, 1700)
-
         }
-
-
       }
     }
 
+//    console.log(array);
+    if (array != "null") {
+      //moving the box
+      collisionObjects[array].position.y = 1;      //altura
+      collisionObjects[array].rotation.x = 3.1;
+      returnToOriginalPlace(collisionObjects[array]);
+    }
   });
 
   render();
 
-  $(document).on('click', '#boton', function (e) {
+  $(document).on('click', '#boton', function (e) {      //iINSERT NEW PLAYER
     e.preventDefault();
     var position = { x: 0, y: 2, z: 0 };
     var rotation = { x: 0, y: 0, z: 0 };
     let nombre = document.querySelector("#txtName").value;
     let action = "idle";
     userName = nombre;
+    let boxPosition = "";
 
     var newPlayer = dbRefPlayers.push();
     newPlayer.set({
@@ -155,6 +173,7 @@ $(document).ready(function () {
       position,
       rotation,
       action,
+      boxPosition,
     });
   });
 });
@@ -207,7 +226,6 @@ function setupScene() {
   cube = new THREE.Mesh(geometry, material)
   //GRID
   cube.name = "rock";
-  dahyun = cube;
 
   var grid = new THREE.GridHelper(50, 10, 0xffffff, 0xffffff);
 
@@ -258,85 +276,22 @@ function render() {
   var place;
 
   if (keys["A"]) {
-    yaw = 5;
+    yaw = 6.5;
     run = true;
   } if (keys["D"]) {
-    yaw = -5;
+    yaw = -6.5;
     run = true;
   }
   if (keys["W"]) {
-    forward = -5;
+    forward = -14;
     run = true;
   } if (keys["S"]) {
-    forward = 5;
+    forward = 14;
     run = true;
   }
   if (keys["M"]) {
     run = true;
     jump = true;
-  }
-
-  for (var i = 0; i < jugadores.length; i++) {
-    if (jugadores[i].player.nombre == userName) {
-      currentPlayer = jugadores[i].player;
-      currentKey = jugadores[i].key;
-      place = i;
-      update = true;
-    }
-  }
-
-  if (update) {
-
-    //    man = scene.getObjectByName("rock");
-    personajePrincipal = scene.getObjectByName(currentPlayer.nombre);
-    personajePrincipal.rotation.y += yaw * deltaTime;
-    personajePrincipal.translateZ(forward * deltaTime);
-
-    currentPlayer.rotation.y = personajePrincipal.rotation.y;
-    currentPlayer.position.x = personajePrincipal.position.x;
-    currentPlayer.position.z = personajePrincipal.position.z;
-    currentPlayer.action = "idle";
-
-    if (run) {
-      personajePrincipal.run.play();
-      currentPlayer.action = "run";
-    }
-    else {
-      personajePrincipal.run.stop();
-      currentPlayer.action = "idle";
-    }
-
-    if (jump) {
-      personajePrincipal.jump.play();
-      currentPlayer.action = "jump";
-      setTimeout(() => {
-        personajePrincipal.jump.stop();
-      }, 1700)
-    }
-
-    //  console.log(currentPlayer);
-    updateFirebase(currentPlayer, currentKey);
-
-
-    /*
-    try {
-
-      let personajePrincipalBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-      personajePrincipalBB.setFromObject(personajePrincipal);
-
-      let cube2BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-      cube2BB.setFromObject(man);
-
-      if (cube2BB.intersectsBox(cube1BB)) {
-        console.log("xd")
-      }
-      else {
-        console.log("dx");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  */
   }
 
   if (mixers.length > 0) {
@@ -345,16 +300,96 @@ function render() {
     }
   }
 
+  if (jugador1Ready == true && jugador2Ready == true) { //now i can play
+    //if (jugador1Ready == false && jugador2Ready == false) { //now i can play
+    //console.log("you can play");
+    for (var i = 0; i < jugadores.length; i++) {
+      if (jugadores[i].player.nombre == userName) {
+        currentPlayer = jugadores[i].player;
+        currentKey = jugadores[i].key;
+        place = i;
+        update = true;
+      }
+    }
+
+    if (update) {
+
+      personajePrincipal = scene.getObjectByName(currentPlayer.nombre);
+      personajePrincipal.rotation.y += yaw * deltaTime;
+      personajePrincipal.translateZ(forward * deltaTime);
+
+      currentPlayer.rotation.y = personajePrincipal.rotation.y;
+      currentPlayer.position.x = personajePrincipal.position.x;
+      currentPlayer.position.z = personajePrincipal.position.z;
+      currentPlayer.action = "idle";
+
+      if (run) {
+        personajePrincipal.run.play();
+        currentPlayer.action = "run";
+      }
+      else {
+        personajePrincipal.run.stop();
+        currentPlayer.action = "idle";
+      }
+
+      if (jump) {
+        personajePrincipal.jump.play();
+        currentPlayer.action = "jump";
+        salta = true;
+
+        setTimeout(() => {
+          personajePrincipal.jump.stop();
+          salta = false;
+        }, 1700)
+      }
+
+      let objectPos = "null";
+
+      try {//COLISION
+
+        let personajePrincipalBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+        personajePrincipalBB.setFromObject(personajePrincipal);
+
+        let purpleBox1BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+
+        for (var i = 0; i < collisionObjects.length; i++) {
+          purpleBox1BB.setFromObject(collisionObjects[i]);
+
+          if (purpleBox1BB.intersectsBox(personajePrincipalBB) && salta == true) {
+            collisionObjects[i].position.y = 1;      //altura
+            collisionObjects[i].rotation.x = 3.1;
+            returnToOriginalPlace(collisionObjects[i]);
+            objectPos = i;
+            break;
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      updateFirebase(currentPlayer, currentKey, objectPos);
+    }
+  }
   renderer.render(scene, camera);
 }
 
-function updateFirebase(currentPlayer, currentKey) {
+function returnToOriginalPlace(value) {
+  setTimeout(() => {
+    value.position.y = -1.4;
+    value.rotation.x = 0;
+  }, 3800)
+
+}
+
+function updateFirebase(currentPlayer, currentKey, objectPos) {
   const dbRefPlayers = firebase.database().ref().child(`jugadores/${currentKey}`);
+
   dbRefPlayers.update({
     nombre: currentPlayer.nombre,
     position: currentPlayer.position,
     rotation: currentPlayer.rotation,
     action: currentPlayer.action,
+    boxPosition: objectPos,
   })
 }
 
@@ -386,106 +421,99 @@ function cargar_objetos() {
   var purpleBox1 = new THREE.FBXLoader();
   purpleBox1.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
     object_purple_square.position.z = -15;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var redBox1 = new THREE.FBXLoader();
   redBox1.load('resources/Escena1/Models/CubosMemoria/cuboRojo.fbx', function (object_purple_square) {
     object_purple_square.position.z = -15;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 0;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var blackBox1 = new THREE.FBXLoader();
   blackBox1.load('resources/Escena1/Models/CubosMemoria/cuboTrampa.fbx', function (object_purple_square) {
     object_purple_square.position.z = -15;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var orangeBox1 = new THREE.FBXLoader();
   orangeBox1.load('resources/Escena1/Models/CubosMemoria/cuboNaranja.fbx', function (object_purple_square) {
     object_purple_square.position.z = 0;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var greenBox1 = new THREE.FBXLoader();
   greenBox1.load('resources/Escena1/Models/CubosMemoria/cuboVerde.fbx', function (object_purple_square) {
     object_purple_square.position.z = 0;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 0;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var redBox2 = new THREE.FBXLoader();
   redBox2.load('resources/Escena1/Models/CubosMemoria/cuboRojo.fbx', function (object_purple_square) {
     object_purple_square.position.z = 0;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var greenBox2 = new THREE.FBXLoader();
   greenBox2.load('resources/Escena1/Models/CubosMemoria/cuboVerde.fbx', function (object_purple_square) {
     object_purple_square.position.z = 15;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var orangeBox2 = new THREE.FBXLoader();
   orangeBox2.load('resources/Escena1/Models/CubosMemoria/cuboNaranja.fbx', function (object_purple_square) {
     object_purple_square.position.z = 15;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 0;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
 
   var purpleBox2 = new THREE.FBXLoader();
   purpleBox2.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
     object_purple_square.position.z = 15;    //lejos o cercs
-    object_purple_square.position.y = -1.5;      //altura
+    object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
-
-
-
-
-
-
-  /*  collisionObjects.push(purple1);
-    collisionObjects.push(purple2);
-    collisionObjects.push(purple3);
-    collisionObjects.push(purple4);
-    collisionObjects.push(purple5);
-    collisionObjects.push(purple6);
-    collisionObjects.push(purple7);
-    collisionObjects.push(purple8);
-    collisionObjects.push(purple9);
-  */
 }
