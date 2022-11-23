@@ -43,7 +43,23 @@ let jugador2Ready = false;
 let contador = 0;
 let aux;
 let salta = false;
+let pArray = [];
+let dArray = [];
 
+/////////////////////////////////////
+let purpleValidator1 = true;
+let purpleValidator2 = false;
+//
+let redValidator1 = true;
+let redValidator2 = false;
+//
+let greenValidator1 = true;
+let greenValidator2 = false;
+//
+let orangeValidator1 = true;
+let orangeValidator2 = false;
+//
+let auxPlayer = [];
 
 $(document).ready(function () {
   setupScene();
@@ -66,10 +82,20 @@ $(document).ready(function () {
       if (nJugadores == 0) {
         personaje.position.x = -17;    //izq-der
         jugador1Ready = true;
+        let object = {
+          nombre: player.nombre,
+          score: 0
+        }
+        auxPlayer.push(object);
       }
       else {
         jugador2Ready = true;
         personaje.position.x = 15;    //izq-der
+        let object = {
+          nombre: player.nombre,
+          score: 0
+        }
+        auxPlayer.push(object);
         document.getElementById("container").style.display = "none";
       }
       nJugadores++;
@@ -119,9 +145,14 @@ $(document).ready(function () {
     let action = player.action;
     let personajePrincipalxd = scene.getObjectByName(nombre);
     let array = player.boxPosition;
-    //console.log(array);
 
-    for (var i = 0; i < jugadores.length; i++) {
+    //check what user we're talking about :p
+
+
+    //console.log(auxPlayer);
+
+
+    for (var i = 0; i < jugadores.length; i++) {//ANIMATIONS
       if (jugadores[i].key == key) {
         personajePrincipalxd.rotation.y = player.rotation.y;
         personajePrincipalxd.position.z = player.position.z;
@@ -147,12 +178,216 @@ $(document).ready(function () {
       }
     }
 
-//    console.log(array);
-    if (array != "null") {
-      //moving the box
-      collisionObjects[array].position.y = 1;      //altura
+    if (array != "null") {//BOXES
+
+      //MOVE THE CURRENT BOX
+      collisionObjects[array].position.y = 1;
       collisionObjects[array].rotation.x = 3.1;
-      returnToOriginalPlace(collisionObjects[array]);
+
+      //ADD THE BOX AND THE PLAYER TO MY ARRAY 
+      let object = {
+        jugador: nombre,
+        box: collisionObjects[array].name
+      }
+
+      pArray.push(object);
+
+      //GET ALL THE DATA OF MY USER
+      let temp = [];
+      for (var i = 0; i < pArray.length; i++) {
+        if (nombre == pArray[i].jugador) {
+          temp.push(pArray[i].box);
+        }
+      }
+
+      if (temp.includes("purpleBox1") && temp.includes("purpleBox2") && purpleValidator1 == true) {
+        //console.log("ya se pueden retirar los rosas");
+
+        for (let j = 0; j < auxPlayer.length; j++) {
+          if (nombre == auxPlayer[j].nombre) {
+            let aux = auxPlayer[j].score;
+            aux++;
+            auxPlayer[j].score = aux;
+            console.log(auxPlayer[j].nombre);
+            console.log(auxPlayer[j].score);
+          }
+        }
+
+        purpleValidator2 = true;
+
+        for (let i = 0; i < collisionObjects.length; i++) {
+
+          if (collisionObjects[i].name == "purpleBox1") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+
+          if (collisionObjects[i].name == "purpleBox2") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+        }
+      }
+
+      if (temp.includes("redBox1") && temp.includes("redBox2") && redValidator1 == true) {
+        // console.log("ya se pueden retirar los rojos");
+
+        for (let j = 0; j < auxPlayer.length; j++) {
+          if (nombre == auxPlayer[j].nombre) {
+            let aux = auxPlayer[j].score;
+            aux++;
+            auxPlayer[j].score = aux;
+            console.log(auxPlayer[j].nombre);
+            console.log(auxPlayer[j].score);
+          }
+        }
+
+        redValidator2 = true;
+
+        for (let i = 0; i < collisionObjects.length; i++) {
+
+          if (collisionObjects[i].name == "redBox1") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+
+          if (collisionObjects[i].name == "redBox2") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+        }
+      }
+
+      if (temp.includes("greenBox1") && temp.includes("greenBox2") && greenValidator1 == true) {
+        // console.log("ya se pueden retirar los verdes");
+
+        for (let j = 0; j < auxPlayer.length; j++) {
+          if (nombre == auxPlayer[j].nombre) {
+            let aux = auxPlayer[j].score;
+            aux++;
+            auxPlayer[j].score = aux;
+            console.log(auxPlayer[j].nombre);
+            console.log(auxPlayer[j].score);
+          }
+        }
+
+        greenValidator2 = true;
+
+        for (let i = 0; i < collisionObjects.length; i++) {
+
+          if (collisionObjects[i].name == "greenBox1") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+
+          if (collisionObjects[i].name == "greenBox2") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+        }
+      }
+
+      if (temp.includes("orangeBox1") && temp.includes("orangeBox2") && orangeValidator1 == true) {
+        // console.log("ya se pueden retirar los naranjas");
+
+        for (let j = 0; j < auxPlayer.length; j++) {
+          if (nombre == auxPlayer[j].nombre) {
+            let aux = auxPlayer[j].score;
+            aux++;
+            auxPlayer[j].score = aux;
+            console.log(auxPlayer[j].nombre);
+            console.log(auxPlayer[j].score);
+          }
+        }
+
+        orangeValidator2 = true;
+
+        for (let i = 0; i < collisionObjects.length; i++) {
+
+          if (collisionObjects[i].name == "orangeBox1") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+
+          if (collisionObjects[i].name == "orangeBox2") {
+            collisionObjects[i].position.y = 1;
+            collisionObjects[i].rotation.x = 3.1;
+          }
+        }
+      }
+
+      else {
+        setTimeout(() => {
+
+          collisionObjects[array].position.y = -1.4;
+          collisionObjects[array].rotation.x = 0;
+
+          if (purpleValidator2 == true && (collisionObjects[array].name == "purpleBox1" || collisionObjects[array].name == "purpleBox2")) {  //para los morados
+            for (let i = 0; i < collisionObjects.length; i++) {
+
+              if (collisionObjects[i].name == "purpleBox1") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+
+              if (collisionObjects[i].name == "purpleBox2") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+            }
+          }
+
+          if (redValidator2 == true && (collisionObjects[array].name == "redBox1" || collisionObjects[array].name == "redBox2")) {  //para los morados
+            for (let i = 0; i < collisionObjects.length; i++) {
+
+              if (collisionObjects[i].name == "redBox1") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+
+              if (collisionObjects[i].name == "redBox2") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+            }
+          }
+
+          if (greenValidator2 == true && (collisionObjects[array].name == "greenBox1" || collisionObjects[array].name == "greenBox2")) {  //para los morados
+            for (let i = 0; i < collisionObjects.length; i++) {
+
+              if (collisionObjects[i].name == "greenBox1") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+
+              if (collisionObjects[i].name == "greenBox2") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+            }
+          }
+
+          if (orangeValidator2 == true && (collisionObjects[array].name == "orangeBox1" || collisionObjects[array].name == "orangeBox2")) {  //para los morados
+            for (let i = 0; i < collisionObjects.length; i++) {
+
+              if (collisionObjects[i].name == "orangeBox1") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+
+              if (collisionObjects[i].name == "orangeBox2") {
+                collisionObjects[i].position.y = 1;
+                collisionObjects[i].rotation.x = 3.1;
+              }
+            }
+          }
+
+        }, 3800)
+
+        setTimeout(() => {
+          pArray.pop();
+        }, 3700)
+      }
     }
   });
 
@@ -166,6 +401,7 @@ $(document).ready(function () {
     let action = "idle";
     userName = nombre;
     let boxPosition = "";
+    let score = 0;
 
     var newPlayer = dbRefPlayers.push();
     newPlayer.set({
@@ -174,9 +410,23 @@ $(document).ready(function () {
       rotation,
       action,
       boxPosition,
+      score,
     });
   });
 });
+
+function cleanArray() {
+  setTimeout(() => {
+    pArray.pop();
+  }, 2700)
+}
+
+function returnToOriginalPlace(value) {
+  setTimeout(() => {
+    value.position.y = -1.4;
+    value.rotation.x = 0;
+  }, 3800)
+}
 
 function initializeFirebase() {
   const firebaseConfig = {
@@ -283,10 +533,10 @@ function render() {
     run = true;
   }
   if (keys["W"]) {
-    forward = -14;
+    forward = -15;
     run = true;
   } if (keys["S"]) {
-    forward = 14;
+    forward = 15;
     run = true;
   }
   if (keys["M"]) {
@@ -356,9 +606,9 @@ function render() {
           purpleBox1BB.setFromObject(collisionObjects[i]);
 
           if (purpleBox1BB.intersectsBox(personajePrincipalBB) && salta == true) {
-            collisionObjects[i].position.y = 1;      //altura
-            collisionObjects[i].rotation.x = 3.1;
-            returnToOriginalPlace(collisionObjects[i]);
+            //collisionObjects[i].position.y = 1;
+            //collisionObjects[i].rotation.x = 3.1;
+            //returnToOriginalPlace(collisionObjects[i]);
             objectPos = i;
             break;
           }
@@ -366,19 +616,10 @@ function render() {
       } catch (error) {
         console.log(error);
       }
-
       updateFirebase(currentPlayer, currentKey, objectPos);
     }
   }
   renderer.render(scene, camera);
-}
-
-function returnToOriginalPlace(value) {
-  setTimeout(() => {
-    value.position.y = -1.4;
-    value.rotation.x = 0;
-  }, 3800)
-
 }
 
 function updateFirebase(currentPlayer, currentKey, objectPos) {
@@ -425,6 +666,7 @@ function cargar_objetos() {
     object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "purpleBox1";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -436,6 +678,7 @@ function cargar_objetos() {
     object_purple_square.position.x = 0;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "redBox1";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -447,6 +690,7 @@ function cargar_objetos() {
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "blackBox1";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -458,6 +702,7 @@ function cargar_objetos() {
     object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "orangeBox1";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -469,6 +714,7 @@ function cargar_objetos() {
     object_purple_square.position.x = 0;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "greenBox1";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -480,6 +726,7 @@ function cargar_objetos() {
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "redBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -491,6 +738,7 @@ function cargar_objetos() {
     object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "greenBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -502,6 +750,7 @@ function cargar_objetos() {
     object_purple_square.position.x = 0;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "orangeBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -513,6 +762,7 @@ function cargar_objetos() {
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "purpleBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
