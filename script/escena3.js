@@ -200,13 +200,11 @@ function render() {
   }
 
   if (twice == true && disable == false) {
-    // console.log("ya se puede jugar");
     personajePrincipal = scene.getObjectByName("player1");
     rombo = scene.getObjectByName("rombo");
     rombo.rotation.y += 0.05;
     personajePrincipal.rotation.y += yaw * deltaTime;
     personajePrincipal.translateZ(forward * deltaTime);
-    //personajePrincipal.position.y -= 0.01; 
 
     if (run) {
       personajePrincipal.run.play();
