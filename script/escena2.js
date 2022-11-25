@@ -62,6 +62,7 @@ let orangeValidator1 = true;
 let orangeValidator2 = false;
 //
 let auxPlayer = [];
+let disable = false;
 
 $(document).ready(function () {
   setupScene();
@@ -197,8 +198,10 @@ function render() {
     jump = true;
   }
 
-  if (twice == true) {
-    // console.log("ya se puede jugar");
+  if (twice == true && (purpleValidator2 == false ||
+    greenValidator2 == false || orangeValidator2 == false
+    || redValidator2 == false)) {
+
     personajePrincipal = scene.getObjectByName("player1");
     personajePrincipal.rotation.y += yaw * deltaTime;
     personajePrincipal.translateZ(forward * deltaTime);
@@ -246,6 +249,7 @@ function render() {
 
           if (pArray.includes("purpleBox1") && pArray.includes("purpleBox2") && purpleValidator1 == true) {
             console.log("ya se pueden retirar los rosas");
+            disable = true;
 
             purpleValidator2 = true;
 
@@ -402,12 +406,21 @@ function render() {
 
   }
 
+  if (purpleValidator2 == true &&
+    greenValidator2 == true &&
+    orangeValidator2 == true &&
+    redValidator2 == true) {
+    console.log("juego terminado");
+    personajePrincipal.jump.stop();
+    personajePrincipal.run.stop();
+    //IVAN aqui ya pones un modal de victoria y para el inicio
+  }
+
   if (mixers.length > 0) {
     for (var i = 0; i < mixers.length; i++) {
       mixers[i].update(deltaTime);
     }
   }
-
   renderer.render(scene, camera);
 }
 
