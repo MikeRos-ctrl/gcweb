@@ -47,7 +47,8 @@ let pArray = [];
 let dArray = [];
 var player1;
 let twice = false;
-
+let rombo;
+let disable = false;
 /////////////////////////////////////
 let purpleValidator1 = true;
 let purpleValidator2 = false;
@@ -62,6 +63,7 @@ let orangeValidator1 = true;
 let orangeValidator2 = false;
 //
 let auxPlayer = [];
+let gameOver = false;
 
 $(document).ready(function () {
   setupScene();
@@ -197,9 +199,11 @@ function render() {
     jump = true;
   }
 
-  if (twice == true) {
+  if (twice == true && disable == false) {
     // console.log("ya se puede jugar");
     personajePrincipal = scene.getObjectByName("player1");
+    rombo = scene.getObjectByName("rombo");
+    rombo.rotation.y += 0.05;
     personajePrincipal.rotation.y += yaw * deltaTime;
     personajePrincipal.translateZ(forward * deltaTime);
     //personajePrincipal.position.y -= 0.01; 
@@ -211,7 +215,7 @@ function render() {
       personajePrincipal.run.stop();
     }
 
-    if (jump) {
+    if (jump && gameOver == false) {
       personajePrincipal.jump.play();
       salta = true;
 
@@ -230,8 +234,8 @@ function render() {
       personajePrincipalBB.setFromObject(personajePrincipal);
 
       let purpleBox1BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-
-      //      0 2 3 4 7  9
+      let specialBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+      specialBB.setFromObject(collisionObjects[5]);
 
       for (var i = 0; i < collisionObjects.length; i++) {
 
@@ -239,14 +243,28 @@ function render() {
 
         if ((purpleBox1BB.intersectsBox(personajePrincipalBB) || salta == true)) {
           personajePrincipal.position.y = 0.5;
-          console.log("no se cae");
+          //  console.log("no se cae");
+          gameOver = false;
           break;
         }
+
         else {
           personajePrincipal.position.y -= 0.2;
+          gameOver = true;
+          //IVAN aqui ya pones un modal de gaeme over y para el inicio
+          //si quieres poner un timmer de 2 segundos y ya luego se muestra el modal
         }
-
       }
+
+      if (specialBB.intersectsBox(personajePrincipalBB)) {
+        console.log("ganaste");
+        personajePrincipal.jump.stop();
+        personajePrincipal.run.stop();
+
+        //IVAN aqui ya pones un modal de victoria y para el inicio
+        disable = true;
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -439,18 +457,15 @@ function cargar_objetos() {
     scene.add(object_purple_square)
   });
 
-  /*  
-    var objectxd = new THREE.FBXLoader();
-    objectxd.load('resources/dummy/frijoles.fbx', function (object_purple_square) {
-      object_purple_square.position.z = 15;    //lejos o cercs
-      object_purple_square.position.y = -1.4;      //altura
-      object_purple_square.position.x = 15;      //izq derecha
-      object_purple_square.rotation.y = 3.2;
-      object_purple_square.scale.set(0.03, 0.03, 0.03);
-      object_purple_square.name = "purpleBdfghjx2";
-      collisionObjects.push(object_purple_square);
-      scene.add(object_purple_square)
-    });
-  */
-
+  var rombo = new THREE.FBXLoader();
+  rombo.load('resources/Habilidades/confusion.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 15;    //lejos o cercs
+    object_purple_square.position.y = 0;      //altura
+    object_purple_square.position.x = 15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.01, 0.01, 0.01);
+    object_purple_square.name = "rombo";
+    collisionObjects.push(object_purple_square);
+    scene.add(object_purple_square)
+  });
 }
