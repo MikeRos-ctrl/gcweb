@@ -490,6 +490,7 @@ function setupScene() {
 
   camera.position.z = 20;    //lejos o cerca
   camera.position.y = 20;      //altura
+  camera.position.x = -7;
   camera.rotation.x = 5.3;    //angulo camara 4.8
 
   //camera.position.z = 0;    //lejos o cercs
@@ -550,7 +551,7 @@ function render() {
     }
   }
 
-  if (jugador1Ready == true && jugador2Ready == true ) { //now i can play
+  if (jugador1Ready == true && jugador2Ready == true) { //now i can play
     //if (jugador1Ready == false && jugador2Ready == false) { //now i can play
     //console.log("you can play");
     for (var i = 0; i < jugadores.length; i++) {
@@ -663,10 +664,22 @@ function cargar_objetos() {
   purpleBox1.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
     object_purple_square.position.z = -15;    //lejos o cercs
     object_purple_square.position.y = -1.4;      //altura
-    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.position.x = -30;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
     object_purple_square.name = "purpleBox1";
+    collisionObjects.push(object_purple_square);
+    scene.add(object_purple_square)
+  });
+
+  var blackBox1 = new THREE.FBXLoader();
+  blackBox1.load('resources/Escena1/Models/CubosMemoria/cuboTrampa.fbx', function (object_purple_square) {
+    object_purple_square.position.z = -15;    //lejos o cercs
+    object_purple_square.position.y = -1.4;      //altura
+    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "blackBox1";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -683,14 +696,14 @@ function cargar_objetos() {
     scene.add(object_purple_square)
   });
 
-  var blackBox1 = new THREE.FBXLoader();
-  blackBox1.load('resources/Escena1/Models/CubosMemoria/cuboTrampa.fbx', function (object_purple_square) {
+  var blackBox2 = new THREE.FBXLoader();
+  blackBox2.load('resources/Escena1/Models/CubosMemoria/cuboTrampa.fbx', function (object_purple_square) {
     object_purple_square.position.z = -15;    //lejos o cercs
     object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
-    object_purple_square.name = "blackBox1";
+    object_purple_square.name = "blackBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -699,10 +712,22 @@ function cargar_objetos() {
   orangeBox1.load('resources/Escena1/Models/CubosMemoria/cuboNaranja.fbx', function (object_purple_square) {
     object_purple_square.position.z = 0;    //lejos o cercs
     object_purple_square.position.y = -1.4;      //altura
-    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.position.x = -30;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
     object_purple_square.name = "orangeBox1";
+    collisionObjects.push(object_purple_square);
+    scene.add(object_purple_square)
+  });
+
+  var orangeBox2 = new THREE.FBXLoader();
+  orangeBox2.load('resources/Escena1/Models/CubosMemoria/cuboNaranja.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 0;    //lejos o cercs
+    object_purple_square.position.y = -1.4;      //altura
+    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "orangeBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -719,14 +744,14 @@ function cargar_objetos() {
     scene.add(object_purple_square)
   });
 
-  var redBox2 = new THREE.FBXLoader();
-  redBox2.load('resources/Escena1/Models/CubosMemoria/cuboRojo.fbx', function (object_purple_square) {
+  var blackBox3 = new THREE.FBXLoader();
+  blackBox3.load('resources/Escena1/Models/CubosMemoria/cuboTrampa.fbx', function (object_purple_square) {
     object_purple_square.position.z = 0;    //lejos o cercs
     object_purple_square.position.y = -1.4;      //altura
     object_purple_square.position.x = 15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
-    object_purple_square.name = "redBox2";
+    object_purple_square.name = "blackBox3";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -735,22 +760,10 @@ function cargar_objetos() {
   greenBox2.load('resources/Escena1/Models/CubosMemoria/cuboVerde.fbx', function (object_purple_square) {
     object_purple_square.position.z = 15;    //lejos o cercs
     object_purple_square.position.y = -1.4;      //altura
-    object_purple_square.position.x = -15;      //izq derecha
+    object_purple_square.position.x = -30;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
     object_purple_square.name = "greenBox2";
-    collisionObjects.push(object_purple_square);
-    scene.add(object_purple_square)
-  });
-
-  var orangeBox2 = new THREE.FBXLoader();
-  orangeBox2.load('resources/Escena1/Models/CubosMemoria/cuboNaranja.fbx', function (object_purple_square) {
-    object_purple_square.position.z = 15;    //lejos o cercs
-    object_purple_square.position.y = -1.4;      //altura
-    object_purple_square.position.x = 0;      //izq derecha
-    object_purple_square.rotation.y = 3.2;
-    object_purple_square.scale.set(0.03, 0.03, 0.03);
-    object_purple_square.name = "orangeBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
@@ -759,10 +772,34 @@ function cargar_objetos() {
   purpleBox2.load('resources/Escena1/Models/CubosMemoria/cuboMorado.fbx', function (object_purple_square) {
     object_purple_square.position.z = 15;    //lejos o cercs
     object_purple_square.position.y = -1.4;      //altura
-    object_purple_square.position.x = 15;      //izq derecha
+    object_purple_square.position.x = -15;      //izq derecha
     object_purple_square.rotation.y = 3.2;
     object_purple_square.scale.set(0.03, 0.03, 0.03);
     object_purple_square.name = "purpleBox2";
+    collisionObjects.push(object_purple_square);
+    scene.add(object_purple_square)
+  });
+
+  var blackBox3 = new THREE.FBXLoader();
+  blackBox3.load('resources/Escena1/Models/CubosMemoria/cuboTrampa.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 15;    //lejos o cercs
+    object_purple_square.position.y = -1.4;      //altura
+    object_purple_square.position.x = 0;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "blackBox3";
+    collisionObjects.push(object_purple_square);
+    scene.add(object_purple_square)
+  });
+
+  var redBox2 = new THREE.FBXLoader();
+  redBox2.load('resources/Escena1/Models/CubosMemoria/cuboRojo.fbx', function (object_purple_square) {
+    object_purple_square.position.z = 15;    //lejos o cercs
+    object_purple_square.position.y = -1.4;      //altura
+    object_purple_square.position.x = 15;      //izq derecha
+    object_purple_square.rotation.y = 3.2;
+    object_purple_square.scale.set(0.03, 0.03, 0.03);
+    object_purple_square.name = "redBox2";
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
