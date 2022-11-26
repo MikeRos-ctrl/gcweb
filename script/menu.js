@@ -27,7 +27,7 @@ $(document).ready(function () {
       backgroundSound.setBuffer(xd);
       backgroundSound.setLoop(true);
       backgroundSound.setVolume(0.3);
-      backgroundSound.play();
+    //  backgroundSound.play();
     })
 
 

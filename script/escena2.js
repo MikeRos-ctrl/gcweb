@@ -47,7 +47,7 @@ let pArray = [];
 let dArray = [];
 var player1;
 let twice = false;
-
+let once = true;
 /////////////////////////////////////
 let purpleValidator1 = true;
 let purpleValidator2 = false;
@@ -65,7 +65,9 @@ let auxPlayer = [];
 let disable = false
 let listener2;
 let audioLoader2;
-let backgroundSound2;;
+let backgroundSound2;
+var particles;
+let particleSystem;
 
 $(document).ready(function () {
   setupScene();
@@ -164,7 +166,7 @@ function setupScene() {
     backgroundSound.setBuffer(xd);
     backgroundSound.setLoop(true);
     backgroundSound.setVolume(0.3);
-    backgroundSound.play();
+    //  backgroundSound.play();
   })
   ////////////AÑADO OBJETOS A MI ESCENA///////////////////
   listener2 = new THREE.AudioListener();
@@ -453,6 +455,15 @@ function render() {
     console.log("juego terminado");
     personajePrincipal.jump.stop();
     personajePrincipal.run.stop();
+
+    if (once == true) {
+      spawnParticulas(personajePrincipal);
+      once = false;
+    }
+
+
+
+
     //IVAN aqui ya pones un modal de victoria y para el inicio
   }
 
@@ -635,4 +646,39 @@ function cargar_objetos() {
     collisionObjects.push(object_purple_square);
     scene.add(object_purple_square)
   });
+}
+
+function spawnParticulas(target) {
+  // create the particle variables
+  //  console.log(target);
+  particles = new THREE.Geometry();
+  var pMaterial = new THREE.PointsMaterial({
+    color: 0xFFFFFF,
+    size: 1,
+    map: THREE.ImageUtils.loadTexture(
+      "particula.png"
+    ),
+    blending: THREE.AdditiveBlending,
+    transparent: true
+  });
+
+  // now create the individual particles
+  for (var p = 0; p < 50; p++) {
+    let pX = getRandomArbitrary(target.position.x - 10, target.position.x + 10);
+    let pY = getRandomArbitrary(target.position.y - 10, target.position.y + 10);
+    let pZ = getRandomArbitrary(target.position.z - 10, target.position.z + 10);
+    let aux = new THREE.Vector3(pX, pY, pZ);
+    aux.velocity = new THREE.Vector3(0, -Math.random(), 0);
+    particles.vertices.push(aux);
+  }
+
+  // create the particle system
+  particleSystem = new THREE.Points(particles, pMaterial);
+  particleSystem.sortParticles = true;
+  // add it to the scene
+  scene.add(particleSystem);
+}
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
 }
