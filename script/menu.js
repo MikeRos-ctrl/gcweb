@@ -1,9 +1,28 @@
+let aux = [];
+
 $(document).ready(function () {
   $(".menu > img").css("left", "400px");
   $("#fog-index").css("opacity", "1");
+
+  initializeFirebase();
+
+  const dbRefPlayers = firebase.database().ref().child("jugadores");
+
+  dbRefPlayers.on("child_added", (snap) => {
+
+    var player = snap.val();
+
+    let obj = {
+      nombre: player.nombre,
+      score: player.score,
+    }
+    aux.push(obj);
+    //console.log(player);
+  });
 });
 
 $("#btn-configuracion").click(function () {
+
 
   // Get the modal
   var modal = document.getElementById("modal-configuracion");
@@ -30,6 +49,10 @@ $("#btn-configuracion").click(function () {
       modal.style.display = "none";
     }
   }
+
+
+
+
 });
 
 $("#btn-configuracion-pausa").click(function () {
@@ -62,6 +85,20 @@ $("#btn-configuracion-pausa").click(function () {
 });
 
 $("#btn-puntuaciones").click(function () {
+
+  let str = "";
+
+  for (let index = 0; index < aux.length; index++) {
+    str += `
+    <tr>
+    <td>`+ aux[index].nombre + `</td>
+    <td>`+ aux[index].score + `</td>
+  </tr>
+    
+    `;
+    $("#scoresxd").html(str);
+  }
+
 
   // Get the modal
   var modal = document.getElementById("modal-puntuaciones");
@@ -166,3 +203,15 @@ $("#btn-unjugador").click(function () {
 $("#btn-abandonar").click(function () {
   window.location.href = "http://127.0.0.1:5500"
 });
+
+function initializeFirebase() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjfVDplX8NuQc2hr9Npz6tb3QgByXG4gI",
+    authDomain: "gcww-76500.firebaseapp.com",
+    projectId: "gcww-76500",
+    storageBucket: "gcww-76500.appspot.com",
+    messagingSenderId: "204226126815",
+    appId: "1:204226126815:web:b1cd64f8df6b306eb95a6a"
+  };
+  firebase.initializeApp(firebaseConfig);
+}

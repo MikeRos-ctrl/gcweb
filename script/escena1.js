@@ -716,8 +716,6 @@ function render() {
   renderer.render(scene, camera);
 }
 
-
-
 function updateFirebase(currentPlayer, currentKey, objectPos) {
   const dbRefPlayers = firebase.database().ref().child(`jugadores/${currentKey}`);
 
