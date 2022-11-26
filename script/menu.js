@@ -27,7 +27,7 @@ $(document).ready(function () {
       backgroundSound.setBuffer(xd);
       backgroundSound.setLoop(true);
       backgroundSound.setVolume(0.3);
-    //  backgroundSound.play();
+      //  backgroundSound.play();
     })
 
 
@@ -35,7 +35,16 @@ $(document).ready(function () {
 
 });
 
-
+$(document).on('click', '.uwu', function (event) {
+  event.preventDefault();
+  let idUser = $(this).attr("idUser");
+  let nombre = aux[idUser].nombre;
+  let score = aux[idUser].score;
+  //  console.log(idUser);
+  // console.log(nombre);
+  //console.log(score);
+  shareScore(nombre, score);
+});
 
 $("#btn-configuracion").click(function () {
 
@@ -109,8 +118,8 @@ $("#btn-puntuaciones").click(function () {
     <tr>
     <td>`+ aux[index].nombre + `</td>
     <td>`+ aux[index].score + `</td>
-  </tr>
-    
+    <td class="uwu" idUser="`+ index + `"><button>compartir</button></td>
+    </tr>
     `;
     $("#scoresxd").html(str);
   }
@@ -232,3 +241,31 @@ function initializeFirebase() {
   };
   firebase.initializeApp(firebaseConfig);
 }
+
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: '841348103574844',
+    xfbml: true,
+    version: 'v2.9'
+  });
+  FB.AppEvents.logPageView();
+};
+
+(function (d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) { return; }
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+function shareScore(nombre, score) {
+  FB.ui({
+    method: 'share',
+    quote: ":c",
+    caption:"help",
+    href: 'https://www.xd.com', //videogame link xd
+    hashtag: "#Noticxdia_Cool",
+  }, function (response) { });
+}
+
