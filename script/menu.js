@@ -18,8 +18,24 @@ $(document).ready(function () {
     }
     aux.push(obj);
     //console.log(player);
+
+    const listener = new THREE.AudioListener();
+    const audioLoader = new THREE.AudioLoader();
+    const backgroundSound = new THREE.Audio(listener);
+
+    audioLoader.load('script/danger.mp3', function (xd) {
+      backgroundSound.setBuffer(xd);
+      backgroundSound.setLoop(true);
+      backgroundSound.setVolume(0.3);
+      backgroundSound.play();
+    })
+
+
   });
+
 });
+
+
 
 $("#btn-configuracion").click(function () {
 
@@ -200,6 +216,7 @@ $("#btn-unjugador").click(function () {
       break;
   }
 });
+
 $("#btn-abandonar").click(function () {
   window.location.href = "http://127.0.0.1:5500"
 });

@@ -65,6 +65,10 @@ let orangeValidator2 = false;
 let auxPlayer = [];
 let gameOver = false;
 
+let listener2;
+let audioLoader2;
+let backgroundSound2;
+
 $(document).ready(function () {
   setupScene();
   cargar_objetos();
@@ -153,6 +157,32 @@ function setupScene() {
 
   //cube.position.x = 5;
   //cube.add(camera);
+  const listener = new THREE.AudioListener();
+  const audioLoader = new THREE.AudioLoader();
+  const backgroundSound = new THREE.Audio(listener);
+  audioLoader.load('script/danger.mp3', function (xd) {
+    backgroundSound.setBuffer(xd);
+    backgroundSound.setLoop(true);
+    backgroundSound.setVolume(0.2);
+    backgroundSound.play();
+  })
+  scene.add(listener);
+
+  listener2 = new THREE.AudioListener();
+  audioLoader2 = new THREE.AudioLoader();
+  backgroundSound2 = new THREE.Audio(listener2);
+  audioLoader2.load('script/hit.wav', function (xd) {
+    backgroundSound2.setBuffer(xd);
+    backgroundSound2.setLoop(false);
+    backgroundSound2.setVolume(0.3);
+  })
+  
+  scene.add(listener);
+
+
+
+
+
 
   ////////////AÑADO OBJETOS A MI ESCENA///////////////////
   scene.add(ambientLight);
@@ -241,6 +271,7 @@ function render() {
 
         if ((purpleBox1BB.intersectsBox(personajePrincipalBB) || salta == true)) {
           personajePrincipal.position.y = 0.5;
+
           //  console.log("no se cae");
           gameOver = false;
           break;
@@ -261,6 +292,8 @@ function render() {
 
         //IVAN aqui ya pones un modal de victoria y para el inicio
         disable = true;
+        backgroundSound2.play();
+
       }
 
     } catch (error) {

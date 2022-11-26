@@ -62,7 +62,10 @@ let orangeValidator1 = true;
 let orangeValidator2 = false;
 //
 let auxPlayer = [];
-let disable = false;
+let disable = false
+let listener2;
+let audioLoader2;
+let backgroundSound2;;
 
 $(document).ready(function () {
   setupScene();
@@ -153,7 +156,30 @@ function setupScene() {
   //cube.position.x = 5;
   //cube.add(camera);
 
+  const listener = new THREE.AudioListener();
+  const audioLoader = new THREE.AudioLoader();
+  const backgroundSound = new THREE.Audio(listener);
+
+  audioLoader.load('script/danger.mp3', function (xd) {
+    backgroundSound.setBuffer(xd);
+    backgroundSound.setLoop(true);
+    backgroundSound.setVolume(0.3);
+    backgroundSound.play();
+  })
   ////////////AÑADO OBJETOS A MI ESCENA///////////////////
+  listener2 = new THREE.AudioListener();
+  audioLoader2 = new THREE.AudioLoader();
+  backgroundSound2 = new THREE.Audio(listener2);
+  audioLoader2.load('script/hit.wav', function (xd) {
+    backgroundSound2.setBuffer(xd);
+    backgroundSound2.setLoop(false);
+    backgroundSound2.setVolume(0.3);
+  })
+
+
+
+  scene.add(listener);
+
   scene.add(ambientLight);
   scene.add(directionalLight);
   //scene.add(cube);
@@ -248,6 +274,10 @@ function render() {
           pArray.push(collisionObjects[i].name);
 
           if (pArray.includes("purpleBox1") && pArray.includes("purpleBox2") && purpleValidator1 == true) {
+
+            backgroundSound2.play();
+            purpleValidator1 = false;
+
             console.log("ya se pueden retirar los rosas");
             disable = true;
 
@@ -270,6 +300,9 @@ function render() {
           if (pArray.includes("redBox1") && pArray.includes("redBox2") && redValidator1 == true) {
             console.log("ya se pueden retirar los rojos");
 
+            backgroundSound2.play();
+            redValidator1 = false;
+
             redValidator2 = true;
 
             for (let i = 0; i < collisionObjects.length; i++) {
@@ -290,6 +323,9 @@ function render() {
             console.log("ya se pueden retirar los verdes");
             greenValidator2 = true;
 
+            backgroundSound2.play();
+
+            greenValidator1 = false;
             for (let i = 0; i < collisionObjects.length; i++) {
 
               if (collisionObjects[i].name == "greenBox1") {
@@ -306,6 +342,10 @@ function render() {
 
           if (pArray.includes("orangeBox1") && pArray.includes("orangeBox2") && orangeValidator1 == true) {
             console.log("ya se pueden retirar los naranjas");
+
+            backgroundSound2.play();
+
+            orangeValidator1 = false;
 
             orangeValidator2 = true;
 

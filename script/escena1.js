@@ -68,6 +68,9 @@ let disable = false;
 let unaVez = false;
 let flagPower1 = false;
 let flagPower2 = false;
+let listener2;
+let audioLoader2;
+let backgroundSound2;
 
 $(document).ready(function () {
   setupScene();
@@ -505,8 +508,29 @@ function setupScene() {
   //cube.position.x = 5;
   //cube.add(camera);
 
+  const listener = new THREE.AudioListener();
+  const audioLoader = new THREE.AudioLoader();
+  const backgroundSound = new THREE.Audio(listener);
+
+  audioLoader.load('script/danger.mp3', function (xd) {
+    backgroundSound.setBuffer(xd);
+    backgroundSound.setLoop(true);
+    backgroundSound.setVolume(0.3);
+    backgroundSound.play();
+  })
+
+  listener2 = new THREE.AudioListener();
+  audioLoader2 = new THREE.AudioLoader();
+  backgroundSound2 = new THREE.Audio(listener2);
+  audioLoader2.load('script/hit.wav', function (xd) {
+    backgroundSound2.setBuffer(xd);
+    backgroundSound2.setLoop(false);
+    backgroundSound2.setVolume(0.3);
+  })
+
   ////////////AÑADO OBJETOS A MI ESCENA///////////////////
   scene.add(ambientLight);
+  scene.add(listener);
   scene.add(directionalLight);
   //scene.add(cube);
   //scene.add(grid);
@@ -667,6 +691,8 @@ function render() {
         if (especial1.intersectsBox(personajePrincipalBB)) {
           //console.log("power 1"); //reducir velcidad
           flagPower1 = true;
+          backgroundSound2.play();
+
           setTimeout(() => {
             flagPower1 = false;
           }, 8000)
@@ -675,6 +701,8 @@ function render() {
         if (especial2.intersectsBox(personajePrincipalBB)) {
           //console.log("power 2"); //cambiar controles
           flagPower2 = true;
+          backgroundSound2.play();
+
           setTimeout(() => {
             flagPower2 = false;
           }, 8000)
