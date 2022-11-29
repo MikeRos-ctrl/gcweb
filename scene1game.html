@@ -13,12 +13,15 @@
 
 <body>
 
-  <div id="container" style="width: 250px; margin-top: 20px ; position: absolute;">
-    <input type="text" id="txtName" placeholder="Nombre de jugador" style="padding: 3px 6px;" />
-    <button id="boton" style="padding: 3px 6px;">Jugar</button>
+  <div id="container">
+    <input type="text" id="txtName" placeholder="Nombre de jugador" />
+    <button id="boton">JUGAR</button>
+    <img id='foto-hud' src="img/hudplayer.png">
   </div>
 
-  <button id="btn-pausa" onclick="modalpausa()">PAUSA</button>
+  <button id="btn-pausa">PAUSA</button>
+  <p id="score-p1">Jugador 0 puntos</p>
+  <p id="score-p2">Jugador 0 puntos</p>
 
   <div id="modal-pausa" class="modal">
 
@@ -26,7 +29,7 @@
     <div class="modal-content">
       <h2 class="mx-auto">Pausa</h2>
       <br>
-      <button class="close">Reanudar</button>
+      <button class="close" id="keepplaying">Reanudar</button>
       <br>
       <button id="btn-configuracion-pausa">Configuración</button>
       <br>
@@ -36,15 +39,22 @@
 
   </div>
 
-  <!--
-  <main style="display: flex; height: 100px;">
-    <div id="scene-section1" style="width: 50%;"></div>
-    <div id="scene-section2" style="flex-grow: 1;"></div>
-  </main>
--->
+  <div id="modal-ganarmulti" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <h2 class="mx-auto" id="titulo-win">¡Jugador Gana!</h2>
+      <br>
+      <p id="score-final1">Puntuacion 1</p>
+      <br>
+      <p id="score-final2">Puntuacion 2</p>
+      <button id="btn-abandonar2">Abandonar Partida</button>
+
+    </div>
+
+  </div>
 
   <main id="scene-section">
-
   </main>
 
   <div id="modal-configuracion-pausa" class="modal">
@@ -52,23 +62,16 @@
     <!-- Modal content -->
     <div class="modal-content">
       <h2 class="mx-auto">Configuracion del juego</h2>
-      <br>a
+      <br>
       <p>Sonido de Musica</p>
-      <button>100%</button>
+      <button id="sonido-musica">ON</button>
       <br>
       <p>Sonido de Juego</p>
-      <button>100%</button>
-      <br>
-      <p>Dificultad</p>
-      <select>
-        <option>Facil</option>
-        <option>Dificil</option>
-      </select>
-      <br>
-      <button>Guardar</button>
+      <button id="sonido-juego">ON</button>
       <br>
 
-      <button class="close">Cerrar</button>
+      <br>
+      <button id="cerrar-config">Cerrar</button>
 
     </div>
 

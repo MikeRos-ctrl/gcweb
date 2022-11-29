@@ -132,7 +132,10 @@ function setupScene() {
   //CUBO
   var material = new THREE.MeshLambertMaterial({ color: new THREE.Color(0.5, 0.0, 0.0) });
   var geometry = new THREE.BoxGeometry(1, 1, 1);
-  cube = new THREE.Mesh(geometry, material)
+  cube = new THREE.Mesh(geometry, material);
+  cube.scale.set(4, 4, 4);
+
+
   //GRID
   cube.name = "rock";
 
@@ -226,6 +229,10 @@ function render() {
     jump = true;
   }
 
+
+
+
+
   if (twice == true && (purpleValidator2 == false ||
     greenValidator2 == false || orangeValidator2 == false
     || redValidator2 == false)) {
@@ -233,6 +240,7 @@ function render() {
     personajePrincipal = scene.getObjectByName("player1");
     personajePrincipal.rotation.y += yaw * deltaTime;
     personajePrincipal.translateZ(forward * deltaTime);
+
 
     if (run) {
       personajePrincipal.run.play();

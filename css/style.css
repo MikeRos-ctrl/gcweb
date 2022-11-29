@@ -22,6 +22,27 @@
     transition: 0.5s ease-in-out;
 
 }
+#btn-reiniciar{
+    font-family: 'Reem Kufi Ink', sans-serif;
+    font-weight: bold;
+    position: absolute;
+    z-index: 1001;
+    margin-left: 2%;
+    margin-top: 1%;
+    padding: 20px;
+    background-color: rgb(17, 17, 20);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    transition: 0.5s ease-in-out;
+
+}
+#btn-reiniciar:hover{
+    background-color: white;
+    color: black;
+    transition: 0.5s ease-in-out;
+
+}
 #btn-jugar{
     font-family: 'Reem Kufi Ink', sans-serif;
     position: absolute;
@@ -68,7 +89,7 @@
     font-size: 50px;
     z-index: 1001;
     color: white;
-    top: 69%;
+    top: 59%;
     left: 9%;
     cursor: pointer;
     transition: 0.3s;
@@ -165,6 +186,92 @@ body{
     border-radius: 10px;
     padding: 5px;
   }
+  #modal-pausa{
+    display: none;
+  }
+
+  #modal-configuracion-pausa{
+    display: none;
+  }
+
+  #modal-ganaste{
+    display: none;
+  }
+
+  #modal-perdiste{
+    display: none;
+  }
+
+  #modal-ganarmulti{
+    display: none;
+  }
   
+  #txtName{
+    font-family: 'Reem Kufi Ink', sans-serif;
+    position: absolute;
+    z-index: 1003;
+    width: 140px;
+    left: 125px;
+    top: 50px;
+    padding: 5px;
+    font-size: small;
+    height: 40px;
+    border-radius: 0px 10px 10px 0px;
+  }
+
+  #foto-hud{
+    position: absolute;
+    z-index: 1002;
+    top: -180px;
+    left: -100px;
+    transform: scale(0.8);
+  }
+
+  #boton{
+    font-family: 'Reem Kufi Ink', sans-serif;
+    color: white;
+    position: absolute;
+    z-index: 1003;
+    width: 40px;
+    left: 265px;
+    top: 44px;
+    padding: 2px;
+    font-size: x-small;
+    height: 55px;
+    border-radius: 0px 10px 10px 0px;
+    background-color: black;
+    transition: 0.2s ease-in-out;
+
+  }
+  #boton:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease-in-out;
+  }
   /* The Close Button */
  
+  /* The Close Button */
+ #score-p1{
+  font-family: 'Reem Kufi Ink', sans-serif;
+  font-weight: bold;
+  font-size: x-large;
+  position: absolute;
+  z-index: 1005;
+  margin-left: 5%;
+  top: 580px;
+  color: rgb(242, 255, 0);
+  transition: 0.5s ease-in-out;
+  display: none;
+ }
+
+ #score-p2{
+  font-family: 'Reem Kufi Ink', sans-serif;
+  font-weight: bold;
+  font-size: x-large;
+  position: absolute;
+  z-index: 1005;
+  margin-left: 5%;
+  top: 620px;
+  color: rgb(242, 255, 0);
+  transition: 0.5s ease-in-out;
+  display: none;
+ }

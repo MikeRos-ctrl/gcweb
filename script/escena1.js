@@ -71,6 +71,16 @@ let flagPower2 = false;
 let listener2;
 let audioLoader2;
 let backgroundSound2;
+///////////////////////////////////
+const listener = new THREE.AudioListener();
+const audioLoader = new THREE.AudioLoader();
+var isPaused = false;
+var isMusicOn = true;
+var isMusicOff = true;
+var isSFXOn = true;
+var backgroundSound = new Audio('audio/Space.mp3');
+backgroundSound.volume = 0.2;
+var isPaused = false;
 
 $(document).ready(function () {
   setupScene();
@@ -420,6 +430,7 @@ $(document).ready(function () {
       boxPosition,
       score,
     });
+
   });
 });
 
@@ -507,17 +518,17 @@ function setupScene() {
 
   //cube.position.x = 5;
   //cube.add(camera);
-
-  const listener = new THREE.AudioListener();
-  const audioLoader = new THREE.AudioLoader();
-  const backgroundSound = new THREE.Audio(listener);
-
-  audioLoader.load('script/danger.mp3', function (xd) {
-    backgroundSound.setBuffer(xd);
-    backgroundSound.setLoop(true);
-    backgroundSound.setVolume(0.3);
-    backgroundSound.play();
-  })
+  /*
+    const listener = new THREE.AudioListener();
+    const audioLoader = new THREE.AudioLoader();
+    const backgroundSound = new THREE.Audio(listener);
+  
+    audioLoader.load('script/danger.mp3', function (xd) {
+      backgroundSound.setBuffer(xd);
+      backgroundSound.setLoop(true);
+      backgroundSound.setVolume(0.3);
+      backgroundSound.play();
+    })*/
 
   listener2 = new THREE.AudioListener();
   audioLoader2 = new THREE.AudioLoader();
@@ -613,8 +624,13 @@ function render() {
     power2.rotation.y -= 0.05;
   }
 
-  if (jugador1Ready == true && jugador2Ready == true && disable == false) { //now i can play
-
+  if (jugador1Ready == true && jugador2Ready == true && disable == false && !isPaused) { //now i can play
+    var score1 = document.getElementById('score-p1');
+    var score2 = document.getElementById('score-p2');
+    score1.style.display = 'block';
+    score1.textContent = auxPlayer[0].nombre + "  " + "Score:  " + auxPlayer[0].score;
+    score2.style.display = 'block';
+    score2.textContent = auxPlayer[1].nombre + "  " + "Score:  " + auxPlayer[1].score;
     for (var i = 0; i < jugadores.length; i++) {
       if (jugadores[i].player.nombre == userName) {
         currentPlayer = jugadores[i].player;
@@ -720,15 +736,50 @@ function render() {
     orangeValidator2 == true &&
     redValidator2 == true) {
 
+    var score1 = document.getElementById('score-p1');
+    var score2 = document.getElementById('score-p2');
+    score1.style.display = 'block';
+    score1.textContent = auxPlayer[0].nombre + "  " + "Score:  " + auxPlayer[0].score;
+    score2.style.display = 'block';
+    score2.textContent = auxPlayer[1].nombre + "  " + "Score:  " + auxPlayer[1].score;
+
     personajePrincipal.jump.stop();
     personajePrincipal.run.stop();
     personajePrincipal.idle.play();
     disable = true;
 
     if (unaVez == false) {
-      console.log("Game over");
-      console.log("Puntuacion Final");
+      // console.log("Game over");
+      //console.log("Puntuacion Final");
       unaVez = true;
+
+      var modalwin = document.getElementById('modal-ganarmulti');
+      var abandonarmulti = document.getElementById('btn-abandonar2');
+      var puntuacion1 = document.getElementById('score-final1');
+      var puntuacion2 = document.getElementById('score-final2');
+      var titulowin = document.getElementById('titulo-win');
+      var winner;
+      var loser;
+
+      console.log(auxPlayer);
+
+      if (auxPlayer[0].score > auxPlayer[1].score) {
+        winner = auxPlayer[0];
+        loser = auxPlayer[1];
+
+      } else {
+        winner = auxPlayer[1];
+        loser = auxPlayer[0];
+      }
+
+      titulowin.textContent = "Ganador: " + winner.nombre;
+      puntuacion1.textContent = "Puntuacion ganador: " + winner.score;
+      puntuacion2.textContent = "Puntuacion perdedor: " + loser.score;
+      modalwin.style.display = 'block';
+
+      abandonarmulti.onclick = function () {
+        window.location.replace("index.html");
+      }
 
       for (var i = 0; i < jugadores.length; i++) {
         currentKey = jugadores[i].key;
@@ -736,9 +787,8 @@ function render() {
         updateFirebaseRemaster(currentKey, (auxPlayer[i].score));
       }
     }
+    isPaused = true;
 
-    //IVAN aqui ya pones un modal y muestras las puntuaciones y para el inicio
-    //aqui ya no se pueden mover
   }
 
   renderer.render(scene, camera);
@@ -966,3 +1016,86 @@ function cargar_objetos() {
 
 
 }
+
+$("#btn-pausa").click(function () {
+
+  //Obtenemos las ventanas modales
+  var ModalPausa = document.getElementById("modal-pausa");
+  var ModalConfiguracion = document.getElementById("modal-configuracion-pausa");
+
+  //Mostramos el menú
+  ModalPausa.style.display = "block";
+  isPaused = true;
+
+  //Obtenemos los botones
+  var btnConfig = document.getElementById("btn-configuracion-pausa");
+  var btnSalir = document.getElementById("btn-abandonar");
+  var btnSonidoMusica = document.getElementById("sonido-musica");
+  var btnSFX = document.getElementById("sonido-juego");
+
+  var btncontinue = document.getElementById("keepplaying");
+  var span = document.getElementsByClassName("close")[1];
+  var cerrarconfig = document.getElementById("cerrar-config");
+
+  btnSalir.onclick = function () {
+    window.location.replace("index.html");
+
+  }
+
+  btncontinue.onclick = function () {
+    isPaused = false;
+    ModalPausa.style.display = "none";
+  }
+
+  // When the user clicks on the button, open the modal
+  btnConfig.onclick = function () {
+    ModalConfiguracion.style.display = "block";
+
+  }
+
+  // Cerrar con la (x)
+  // span.onclick = function() {
+  //   ModalPausa.style.display = "none";
+  // }
+
+  cerrarconfig.onclick = function () {
+    ModalConfiguracion.style.display = "none";
+
+  }
+
+  btnSonidoMusica.onclick = function () {
+    if (!backgroundSound.paused) {
+      btnSonidoMusica.textContent = "OFF";
+      backgroundSound.pause();
+    }
+    else {
+      btnSonidoMusica.textContent = "ON";
+      backgroundSound.play();
+    }
+  }
+
+  btnSFX.onclick = function () {
+    if (btnSFX.textContent == "ON" && isSFXOn) {
+      isSFXOn = false;
+      btnSFX.textContent = "OFF";
+      console.log("apagado");
+    }
+    else {
+      isSFXOn = true;
+      btnSFX.textContent = "ON";
+      console.log("prendido");
+    }
+  }
+
+  // Cerrar cuando haya un clic afuera de la ventana
+  window.onclick = function (event) {
+    if (event.target == ModalPausa) {
+      isPaused = false;
+      ModalPausa.style.display = "none";
+    }
+
+    if (event.target == ModalConfiguracion) {
+      ModalConfiguracion.style.display = "none";
+    }
+  }
+});
