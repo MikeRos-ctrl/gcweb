@@ -447,6 +447,21 @@ function returnToOriginalPlace(value) {
   }, 3800)
 }
 
+
+
+function initializeFirebase() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCb1_WIxqQpqnWDfkGhULbbhUhr2UJRz2g",
+    authDomain: "gcwremaster.firebaseapp.com",
+    projectId: "gcwremaster",
+    storageBucket: "gcwremaster.appspot.com",
+    messagingSenderId: "44616214660",
+    appId: "1:44616214660:web:8c3d58446a1d96cb437ad1"
+  };
+  firebase.initializeApp(firebaseConfig);
+}
+
+/*
 function initializeFirebase() {
   const firebaseConfig = {
     apiKey: "AIzaSyCjfVDplX8NuQc2hr9Npz6tb3QgByXG4gI",
@@ -458,7 +473,7 @@ function initializeFirebase() {
   };
   firebase.initializeApp(firebaseConfig);
 }
-
+*/
 function setupScene() {
   //INICIAMOS EL RENDERER
   renderer = new THREE.WebGLRenderer({ precision: "mediump" });

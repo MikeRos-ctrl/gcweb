@@ -232,12 +232,12 @@ $("#btn-abandonar").click(function () {
 
 function initializeFirebase() {
   const firebaseConfig = {
-    apiKey: "AIzaSyCjfVDplX8NuQc2hr9Npz6tb3QgByXG4gI",
-    authDomain: "gcww-76500.firebaseapp.com",
-    projectId: "gcww-76500",
-    storageBucket: "gcww-76500.appspot.com",
-    messagingSenderId: "204226126815",
-    appId: "1:204226126815:web:b1cd64f8df6b306eb95a6a"
+    apiKey: "AIzaSyCb1_WIxqQpqnWDfkGhULbbhUhr2UJRz2g",
+    authDomain: "gcwremaster.firebaseapp.com",
+    projectId: "gcwremaster",
+    storageBucket: "gcwremaster.appspot.com",
+    messagingSenderId: "44616214660",
+    appId: "1:44616214660:web:8c3d58446a1d96cb437ad1"
   };
   firebase.initializeApp(firebaseConfig);
 }
@@ -263,7 +263,7 @@ function shareScore(nombre, score) {
   FB.ui({
     method: 'share',
     quote: ":c",
-    caption:"help",
+    caption: "help",
     href: 'https://www.xd.com', //videogame link xd
     hashtag: "#Noticxdia_Cool",
   }, function (response) { });
